@@ -1,0 +1,58 @@
+{
+  "manifest_version": 3,
+  "name": "Ad Cleaner",
+  "version": "0.9.19",
+  "description": "Block likely ad requests, mark ad surfaces, and clean them from the page.",
+  "action": {
+    "default_title": "Ad Cleaner",
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "declarativeNetRequest",
+    "declarativeNetRequestWithHostAccess",
+    "declarativeNetRequestFeedback",
+    "storage"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "content.css"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "options_page": "options.html",
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "core-blocklist",
+        "enabled": true,
+        "path": "rules/ad-block-rules.json"
+      },
+      {
+        "id": "privacy-coverage",
+        "enabled": true,
+        "path": "rules/privacy-coverage-rules.json"
+      },
+      {
+        "id": "always-active",
+        "enabled": true,
+        "path": "rules/always-active-rules.json"
+      }
+    ]
+  }
+}

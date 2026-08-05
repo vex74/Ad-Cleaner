@@ -1,0 +1,205 @@
+:root {
+  color-scheme: light;
+}
+
+[data-ad-cleaner-marked="true"] {
+  outline: 2px solid rgba(255, 78, 78, 0.95) !important;
+  outline-offset: 2px !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.35),
+    inset 0 0 0 9999px rgba(255, 78, 78, 0.08) !important;
+  filter: saturate(0.95) contrast(0.98) !important;
+}
+
+[data-ad-cleaner-badge="true"]::after {
+  content: "广告";
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2147483647;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font: 600 11px/1.2 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: 0.06em;
+  color: #fff;
+  background: linear-gradient(135deg, rgba(255, 88, 88, 0.98), rgba(255, 146, 57, 0.98));
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.16);
+  pointer-events: none;
+}
+
+[data-ad-cleaner-hidden="true"] {
+  display: none !important;
+}
+
+html[data-ad-cleaner-enabled="false"] [data-ad-cleaner-marked="true"] {
+  outline-style: dashed !important;
+}
+
+html[data-ad-cleaner-picker-active="true"] {
+  cursor: crosshair !important;
+}
+
+[data-ad-cleaner-picker-target="true"] {
+  outline: 3px solid rgba(60, 210, 140, 0.98) !important;
+  outline-offset: 3px !important;
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.28),
+    0 0 0 9999px rgba(60, 210, 140, 0.06) !important;
+}
+
+[data-ad-cleaner-picker-ui="true"] {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 2147483647;
+  width: min(360px, calc(100vw - 24px));
+  pointer-events: auto;
+}
+
+[data-ad-cleaner-picker-ui="true"] .ad-cleaner-picker-shell {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background:
+    radial-gradient(circle at top left, rgba(60, 210, 140, 0.18), transparent 44%),
+    linear-gradient(180deg, rgba(18, 20, 28, 0.98), rgba(10, 12, 18, 0.98));
+  color: #f4f7fb;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(18px);
+}
+
+[data-ad-cleaner-picker-ui="true"] .ad-cleaner-picker-title {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+[data-ad-cleaner-picker-ui="true"] .ad-cleaner-picker-copy {
+  color: rgba(244, 247, 251, 0.72);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+[data-ad-cleaner-picker-ui="true"] .ad-cleaner-picker-message {
+  min-height: 18px;
+  color: rgba(180, 247, 214, 0.92);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+[data-ad-cleaner-picker-ui="true"] .ad-cleaner-picker-cancel {
+  justify-self: start;
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: #f4f7fb;
+  border-radius: 12px;
+  padding: 8px 10px;
+  font: 600 12px/1.2 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  cursor: pointer;
+}
+
+[data-ad-cleaner-recovery-panel="true"] {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 2147483647;
+  width: min(420px, calc(100vw - 24px));
+  pointer-events: auto;
+}
+
+[data-ad-cleaner-recovery-panel="true"] .ad-cleaner-panel-shell {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background:
+    radial-gradient(circle at top left, rgba(255, 106, 77, 0.18), transparent 44%),
+    linear-gradient(180deg, rgba(18, 20, 28, 0.98), rgba(10, 12, 18, 0.98));
+  color: #f4f7fb;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(18px);
+}
+
+[data-ad-cleaner-recovery-panel="true"] .ad-cleaner-panel-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+
+[data-ad-cleaner-recovery-panel="true"] .ad-cleaner-panel-kicker {
+  color: rgba(244, 247, 251, 0.62);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+[data-ad-cleaner-recovery-panel="true"] .ad-cleaner-panel-title {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+[data-ad-cleaner-recovery-panel="true"] .ad-cleaner-panel-header button,
+[data-ad-cleaner-recovery-panel="true"] .ad-cleaner-panel-toolbar button,
+[data-ad-cleaner-recovery-panel="true"] .ad-cleaner-panel-row button {
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: #f4f7fb;
+  border-radius: 12px;
+  padding: 8px 10px;
+  font: 600 12px/1.2 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  cursor: pointer;
+}
+
+[data-ad-cleaner-recovery-panel="true"] .ad-cleaner-panel-toolbar {
+  display: flex;
+  gap: 8px;
+}
+
+[data-ad-cleaner-recovery-panel="true"] .ad-cleaner-panel-body {
+  display: grid;
+  gap: 8px;
+  max-height: min(48vh, 420px);
+  overflow: auto;
+  padding-right: 2px;
+}
+
+[data-ad-cleaner-recovery-panel="true"] .ad-cleaner-panel-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+[data-ad-cleaner-recovery-panel="true"] .ad-cleaner-panel-row-title {
+  font-weight: 650;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+[data-ad-cleaner-recovery-panel="true"] .ad-cleaner-panel-row-sub {
+  margin-top: 3px;
+  color: rgba(244, 247, 251, 0.62);
+  font-size: 11px;
+}
+
+[data-ad-cleaner-recovery-panel="true"] .ad-cleaner-panel-empty {
+  padding: 14px;
+  color: rgba(244, 247, 251, 0.7);
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+}

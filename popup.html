@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ad Cleaner</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <div class="eyebrow">Ad Cleaner</div>
+        <h1>拦截、标记、清理</h1>
+        <p class="lede">自动挡住常见广告请求，并把网页里疑似广告的块高亮出来，方便一键清理。</p>
+      </section>
+
+      <section class="panel">
+        <div class="status-row">
+          <div>
+            <div class="label">当前页面</div>
+            <div id="pageStatus" class="value">正在连接…</div>
+          </div>
+          <label class="switch">
+            <input id="enabledToggle" type="checkbox" />
+            <span class="track"></span>
+          </label>
+        </div>
+
+        <div class="count-card">
+          <div class="count-number" id="markedCount">0</div>
+          <div class="count-copy">个广告候选已标记</div>
+        </div>
+
+          <div class="metric-grid">
+            <div class="metric-pill">
+              <div class="label">页面模式</div>
+              <div id="profileStatus" class="metric-value">标准模式</div>
+            </div>
+          <div class="metric-pill">
+            <div class="label">启发式</div>
+            <div id="heuristicCount" class="metric-value">0</div>
+          </div>
+          <div class="metric-pill">
+            <div class="label">自定义命中</div>
+            <div id="customHits" class="metric-value">0</div>
+          </div>
+          <div class="metric-pill">
+            <div class="label">订阅命中</div>
+            <div id="subscriptionHits" class="metric-value">0</div>
+          </div>
+            <div class="metric-pill">
+              <div class="label">恢复次数</div>
+              <div id="restoredCount" class="metric-value">0</div>
+            </div>
+          <div class="metric-pill">
+            <div class="label">同步状态</div>
+            <div id="syncStatus" class="metric-value">0 跳过</div>
+          </div>
+          <div class="metric-pill">
+            <div class="label">拦截链接</div>
+            <div id="networkMatches" class="metric-value">检查中</div>
+          </div>
+          </div>
+
+        <div class="actions">
+          <button id="scanBtn" class="primary">重新扫描</button>
+          <button id="cleanBtn" class="danger">立即隐藏</button>
+          <button id="restoreBtn" class="ghost">恢复清理</button>
+          <button id="panelBtn" class="ghost">误杀面板</button>
+          <button id="pickBtn" class="ghost">点选屏蔽</button>
+        </div>
+
+        <div class="site-panel">
+          <div class="site-meta">
+            <div class="label">当前站点</div>
+            <div id="siteHost" class="site-host">正在识别…</div>
+            <div id="siteMode" class="site-mode">默认</div>
+          </div>
+          <div class="filter-row">
+            <div class="filter-copy">
+              <div class="label">内置过滤</div>
+              <div id="filterMode" class="site-mode">开启</div>
+            </div>
+            <label class="switch compact">
+              <input id="builtinToggle" type="checkbox" />
+              <span class="track"></span>
+            </label>
+          </div>
+          <div class="site-actions">
+            <button id="allowSiteBtn" class="ghost">白名单</button>
+            <button id="blockSiteBtn" class="danger">黑名单</button>
+            <button id="clearSiteBtn" class="ghost">清除</button>
+            <button id="openOptionsBtn" class="ghost">设置页</button>
+          </div>
+        </div>
+
+        <div class="footnote">
+          订阅和手动规则会持续生效，内置过滤可以在设置页单独关闭。
+        </div>
+      </section>
+    </main>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
