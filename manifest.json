@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Ad Cleaner",
-  "version": "0.9.19",
+  "version": "0.9.20",
   "description": "Block likely ad requests, mark ad surfaces, and clean them from the page.",
   "icons": {
     "16": "icons/icon-16.png",

@@ -1,15 +1,15 @@
 :root {
-  color-scheme: dark;
-  --bg: #0f1117;
-  --panel: rgba(18, 21, 30, 0.94);
-  --panel-2: rgba(255, 255, 255, 0.04);
-  --border: rgba(255, 255, 255, 0.09);
-  --text: #f4f7fb;
-  --muted: rgba(244, 247, 251, 0.68);
-  --accent: #ff6a4d;
-  --accent-2: #ffbe3d;
-  --danger: #ff5d65;
-  --success: #3ecf8e;
+  color-scheme: light;
+  --bg: #eaf6ff;
+  --panel: rgba(255, 255, 255, 0.92);
+  --panel-2: rgba(13, 111, 207, 0.05);
+  --border: rgba(13, 111, 207, 0.16);
+  --text: #0c3a63;
+  --muted: rgba(12, 58, 99, 0.66);
+  --accent: #4fa8f0;
+  --accent-2: #0d6fcf;
+  --danger: #df5566;
+  --success: #1aa577;
 }
 
 * {
@@ -21,9 +21,9 @@ body {
   margin: 0;
   min-height: 100%;
   background:
-    radial-gradient(circle at top left, rgba(255, 106, 77, 0.2), transparent 35%),
-    radial-gradient(circle at bottom right, rgba(255, 190, 61, 0.15), transparent 30%),
-    linear-gradient(180deg, #111521 0%, #0c0f14 100%);
+    radial-gradient(circle at top left, rgba(127, 199, 255, 0.5), transparent 38%),
+    radial-gradient(circle at bottom right, rgba(77, 168, 240, 0.32), transparent 30%),
+    linear-gradient(180deg, #f4fbff 0%, #e4f3ff 100%);
   color: var(--text);
   font: 14px/1.5 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
@@ -34,8 +34,8 @@ body::before {
   inset: 0;
   pointer-events: none;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    linear-gradient(rgba(13, 111, 207, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(13, 111, 207, 0.035) 1px, transparent 1px);
   background-size: 24px 24px;
   mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.85), transparent 95%);
 }
@@ -56,9 +56,9 @@ body::before {
   margin-bottom: 10px;
   padding: 5px 10px;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.04);
-  color: rgba(244, 247, 251, 0.76);
+  border: 1px solid rgba(13, 111, 207, 0.16);
+  background: rgba(255, 255, 255, 0.6);
+  color: rgba(12, 58, 99, 0.76);
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -87,8 +87,8 @@ h1 {
   padding: 18px;
   border: 1px solid var(--border);
   border-radius: 24px;
-  background: linear-gradient(180deg, rgba(17, 20, 28, 0.95), rgba(13, 15, 21, 0.96));
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(239, 249, 255, 0.92));
+  box-shadow: 0 22px 55px rgba(45, 123, 207, 0.14);
   backdrop-filter: blur(18px);
 }
 
@@ -98,8 +98,8 @@ h1 {
 
 .card.accent {
   background:
-    linear-gradient(135deg, rgba(255, 106, 77, 0.14), rgba(255, 190, 61, 0.08)),
-    linear-gradient(180deg, rgba(17, 20, 28, 0.95), rgba(13, 15, 21, 0.96));
+    linear-gradient(135deg, rgba(211, 240, 255, 0.85), rgba(127, 199, 255, 0.42)),
+    linear-gradient(180deg, #ffffff 0%, #eaf7ff 100%);
 }
 
 .card-head {
@@ -110,7 +110,7 @@ h1 {
 }
 
 .label {
-  color: rgba(244, 247, 251, 0.54);
+  color: rgba(12, 58, 99, 0.56);
   font-size: 11px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -138,7 +138,7 @@ h2 {
   gap: 16px;
   margin-top: 16px;
   padding-top: 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(13, 111, 207, 0.12);
 }
 
 .feature-copy {
@@ -156,9 +156,9 @@ h2 {
   gap: 6px;
   padding: 6px 10px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: rgba(244, 247, 251, 0.88);
+  background: rgba(13, 111, 207, 0.08);
+  border: 1px solid rgba(13, 111, 207, 0.16);
+  color: rgba(12, 58, 99, 0.9);
   font-size: 12px;
   white-space: nowrap;
 }
@@ -205,15 +205,16 @@ input,
 select {
   width: 100%;
   border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.11);
-  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(13, 111, 207, 0.18);
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: inset 0 1px 2px rgba(13, 111, 207, 0.05);
   color: var(--text);
   padding: 12px 14px;
   outline: none;
 }
 
 input::placeholder {
-  color: rgba(244, 247, 251, 0.35);
+  color: rgba(12, 58, 99, 0.38);
 }
 
 textarea {
@@ -221,15 +222,16 @@ textarea {
   resize: vertical;
   min-height: 100px;
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.11);
-  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(13, 111, 207, 0.18);
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: inset 0 1px 2px rgba(13, 111, 207, 0.05);
   color: var(--text);
   padding: 12px 14px;
   outline: none;
 }
 
 textarea::placeholder {
-  color: rgba(244, 247, 251, 0.35);
+  color: rgba(12, 58, 99, 0.38);
 }
 
 button {
@@ -252,19 +254,19 @@ button:active {
 .primary {
   color: #fff;
   background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  box-shadow: 0 10px 24px rgba(255, 106, 77, 0.22);
+  box-shadow: 0 10px 24px rgba(13, 111, 207, 0.28);
 }
 
 .danger {
-  color: #fff;
-  background: rgba(255, 93, 101, 0.18);
-  border: 1px solid rgba(255, 93, 101, 0.2) !important;
+  color: #c63b4c;
+  background: rgba(223, 85, 102, 0.1);
+  border: 1px solid rgba(223, 85, 102, 0.22) !important;
 }
 
 .ghost {
   color: var(--text);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(13, 111, 207, 0.16) !important;
 }
 
 .ghost.small {
@@ -294,8 +296,8 @@ button:active {
   width: 100%;
   height: 100%;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: rgba(13, 111, 207, 0.14);
+  border: 1px solid rgba(13, 111, 207, 0.2);
   position: relative;
 }
 
@@ -308,13 +310,13 @@ button:active {
   height: 22px;
   border-radius: 50%;
   background: #fff;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.32);
+  box-shadow: 0 4px 14px rgba(13, 111, 207, 0.28);
   transition: transform 140ms ease;
 }
 
 .switch input:checked + span {
-  background: rgba(62, 207, 142, 0.24);
-  border-color: rgba(62, 207, 142, 0.45);
+  background: linear-gradient(135deg, #4fa8f0, #0d6fcf);
+  border-color: rgba(13, 111, 207, 0.5);
 }
 
 .switch input:checked + span::after {
@@ -341,9 +343,9 @@ button:active {
 .selector-card {
   padding: 16px;
   border-radius: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(13, 111, 207, 0.13);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.025));
+    linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(238, 248, 255, 0.84));
 }
 
 .selector-card-head {
@@ -363,12 +365,12 @@ button:active {
 .selector-stat {
   padding: 10px 12px;
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(13, 111, 207, 0.12);
 }
 
 .selector-stat-label {
-  color: rgba(244, 247, 251, 0.52);
+  color: rgba(12, 58, 99, 0.52);
   font-size: 11px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -399,9 +401,9 @@ button:active {
   gap: 12px;
   padding: 16px;
   border-radius: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(13, 111, 207, 0.13);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.025));
+    linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(238, 248, 255, 0.84));
 }
 
 .subscription-card-head {
@@ -423,7 +425,7 @@ button:active {
 }
 
 .subscription-source {
-  color: rgba(244, 247, 251, 0.54);
+  color: rgba(12, 58, 99, 0.54);
   font-size: 11px;
   line-height: 1.5;
   word-break: break-word;
@@ -441,27 +443,27 @@ button:active {
 }
 
 .pill.disabled {
-  color: rgba(244, 247, 251, 0.76);
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(12, 58, 99, 0.78);
+  background: rgba(13, 111, 207, 0.08);
+  border: 1px solid rgba(13, 111, 207, 0.12);
 }
 
 .pill.empty {
-  color: #ffdca0;
-  background: rgba(255, 190, 61, 0.12);
-  border: 1px solid rgba(255, 190, 61, 0.2);
+  color: #9a5b00;
+  background: rgba(255, 190, 61, 0.18);
+  border: 1px solid rgba(255, 190, 61, 0.3);
 }
 
 .pill.allow {
-  color: #9ef0c4;
-  background: rgba(62, 207, 142, 0.12);
-  border: 1px solid rgba(62, 207, 142, 0.2);
+  color: #0e7a55;
+  background: rgba(26, 165, 119, 0.12);
+  border: 1px solid rgba(26, 165, 119, 0.22);
 }
 
 .pill.block {
-  color: #ffb0b5;
-  background: rgba(255, 93, 101, 0.12);
-  border: 1px solid rgba(255, 93, 101, 0.2);
+  color: #c23b4c;
+  background: rgba(223, 85, 102, 0.12);
+  border: 1px solid rgba(223, 85, 102, 0.22);
 }
 
 .rules-list .rule-row textarea,
@@ -484,8 +486,8 @@ button:active {
   gap: 12px;
   padding: 14px;
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(13, 111, 207, 0.12);
+  background: rgba(255, 255, 255, 0.72);
 }
 
 .rule-meta {
@@ -508,7 +510,7 @@ button:active {
 
 .rule-detail {
   margin-top: 5px;
-  color: rgba(244, 247, 251, 0.54);
+  color: rgba(12, 58, 99, 0.55);
   font-size: 11px;
   line-height: 1.45;
 }
@@ -526,15 +528,15 @@ button:active {
 }
 
 .pill.allow {
-  color: #9ef0c4;
-  background: rgba(62, 207, 142, 0.12);
-  border: 1px solid rgba(62, 207, 142, 0.2);
+  color: #0e7a55;
+  background: rgba(26, 165, 119, 0.12);
+  border: 1px solid rgba(26, 165, 119, 0.22);
 }
 
 .pill.block {
-  color: #ffb0b5;
-  background: rgba(255, 93, 101, 0.12);
-  border: 1px solid rgba(255, 93, 101, 0.2);
+  color: #c23b4c;
+  background: rgba(223, 85, 102, 0.12);
+  border: 1px solid rgba(223, 85, 102, 0.22);
 }
 
 .rule-actions {
