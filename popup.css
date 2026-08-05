@@ -8,8 +8,10 @@
   --muted: rgba(12, 58, 99, 0.7);
   --accent: #4fa8f0;
   --accent-2: #0d6fcf;
+  --danger: #df5566;
   --success: #1aa577;
   --shadow: 0 20px 45px rgba(45, 123, 207, 0.16);
+  --radius: 16px;
 }
 
 * {
@@ -82,7 +84,7 @@ h1 {
 .panel {
   padding: 16px;
   border: 1px solid var(--border);
-  border-radius: 20px;
+  border-radius: var(--radius);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(239, 249, 255, 0.94));
   box-shadow: var(--shadow);
   backdrop-filter: blur(20px);
@@ -113,7 +115,7 @@ h1 {
   place-items: center;
   margin: 8px 0 14px;
   padding: 18px 12px;
-  border-radius: 18px;
+  border-radius: var(--radius);
   background:
     linear-gradient(135deg, rgba(211, 240, 255, 0.95), rgba(127, 199, 255, 0.55)),
     #ffffff;
@@ -142,7 +144,7 @@ h1 {
 
 .metric-pill {
   padding: 10px 12px;
-  border-radius: 16px;
+  border-radius: var(--radius);
   border: 1px solid rgba(13, 111, 207, 0.13);
   background: rgba(255, 255, 255, 0.82);
 }
@@ -159,10 +161,11 @@ h1 {
   gap: 10px;
 }
 
-.actions button {
+.actions button,
+.site-actions button {
   appearance: none;
   border: 0;
-  border-radius: 14px;
+  border-radius: var(--radius);
   padding: 11px 12px;
   font: inherit;
   font-weight: 700;
@@ -170,11 +173,13 @@ h1 {
   transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease;
 }
 
-.actions button:hover {
+.actions button:hover,
+.site-actions button:hover {
   transform: translateY(-1px);
 }
 
-.actions button:active {
+.actions button:active,
+.site-actions button:active {
   transform: translateY(0);
 }
 
@@ -225,7 +230,7 @@ h1 {
   gap: 12px;
   margin-top: 10px;
   padding: 10px 12px;
-  border-radius: 16px;
+  border-radius: var(--radius);
   border: 1px solid rgba(13, 111, 207, 0.12);
   background: rgba(255, 255, 255, 0.72);
 }

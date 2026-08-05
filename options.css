@@ -1,15 +1,17 @@
 :root {
   color-scheme: light;
   --bg: #eaf6ff;
-  --panel: rgba(255, 255, 255, 0.92);
-  --panel-2: rgba(13, 111, 207, 0.05);
+  --bg-soft: rgba(13, 111, 207, 0.05);
+  --card: rgba(255, 255, 255, 0.94);
   --border: rgba(13, 111, 207, 0.16);
   --text: #0c3a63;
-  --muted: rgba(12, 58, 99, 0.66);
+  --muted: rgba(12, 58, 99, 0.7);
   --accent: #4fa8f0;
   --accent-2: #0d6fcf;
   --danger: #df5566;
   --success: #1aa577;
+  --shadow: 0 20px 45px rgba(45, 123, 207, 0.16);
+  --radius: 16px;
 }
 
 * {
@@ -21,8 +23,8 @@ body {
   margin: 0;
   min-height: 100%;
   background:
-    radial-gradient(circle at top left, rgba(127, 199, 255, 0.5), transparent 38%),
-    radial-gradient(circle at bottom right, rgba(77, 168, 240, 0.32), transparent 30%),
+    radial-gradient(circle at top left, rgba(127, 199, 255, 0.5), transparent 42%),
+    radial-gradient(circle at bottom right, rgba(77, 168, 240, 0.32), transparent 36%),
     linear-gradient(180deg, #f4fbff 0%, #e4f3ff 100%);
   color: var(--text);
   font: 14px/1.5 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -36,25 +38,25 @@ body::before {
   background-image:
     linear-gradient(rgba(13, 111, 207, 0.035) 1px, transparent 1px),
     linear-gradient(90deg, rgba(13, 111, 207, 0.035) 1px, transparent 1px);
-  background-size: 24px 24px;
-  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.85), transparent 95%);
+  background-size: 22px 22px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.65), transparent 85%);
 }
 
 .page {
-  width: min(1080px, calc(100% - 40px));
+  width: min(1160px, calc(100% - 32px));
   margin: 0 auto;
-  padding: 34px 0 42px;
+  padding: 22px 0 28px;
 }
 
 .hero {
-  margin-bottom: 18px;
+  margin-bottom: 12px;
 }
 
 .eyebrow {
   display: inline-flex;
   align-items: center;
-  margin-bottom: 10px;
-  padding: 5px 10px;
+  margin-bottom: 6px;
+  padding: 4px 9px;
   border-radius: 999px;
   border: 1px solid rgba(13, 111, 207, 0.16);
   background: rgba(255, 255, 255, 0.6);
@@ -65,10 +67,10 @@ body::before {
 }
 
 h1 {
-  margin: 0 0 8px;
-  font-size: clamp(32px, 4vw, 48px);
+  margin: 0 0 5px;
+  font-size: 38px;
   line-height: 1;
-  letter-spacing: -0.05em;
+  letter-spacing: 0;
 }
 
 .hero p {
@@ -80,20 +82,25 @@ h1 {
 .grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+  gap: 12px;
 }
 
 .card {
-  padding: 18px;
+  min-width: 0;
+  padding: 14px;
   border: 1px solid var(--border);
-  border-radius: 24px;
+  border-radius: var(--radius);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(239, 249, 255, 0.92));
-  box-shadow: 0 22px 55px rgba(45, 123, 207, 0.14);
+  box-shadow: var(--shadow);
   backdrop-filter: blur(18px);
 }
 
 .card.full {
   grid-column: 1 / -1;
+}
+
+.card.desktop-half {
+  grid-column: auto;
 }
 
 .card.accent {
@@ -106,7 +113,7 @@ h1 {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 16px;
+  gap: 12px;
 }
 
 .label {
@@ -118,13 +125,14 @@ h1 {
 
 h2 {
   margin: 2px 0 0;
-  font-size: 18px;
-  letter-spacing: -0.03em;
+  font-size: 17px;
+  letter-spacing: 0;
 }
 
 .muted {
-  margin: 10px 0 0;
+  margin: 6px 0 0;
   color: var(--muted);
+  line-height: 1.4;
 }
 
 .muted.compact {
@@ -135,9 +143,9 @@ h2 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  margin-top: 16px;
-  padding-top: 16px;
+  gap: 12px;
+  margin-top: 12px;
+  padding-top: 12px;
   border-top: 1px solid rgba(13, 111, 207, 0.12);
 }
 
@@ -147,7 +155,7 @@ h2 {
 
 .feature-title {
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
 }
 
 .badge {
@@ -174,15 +182,15 @@ h2 {
 .quick-actions {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-  margin-top: 16px;
+  gap: 8px;
+  margin-top: 12px;
 }
 
 .form-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 150px 128px;
-  gap: 10px;
-  margin-top: 16px;
+  gap: 8px;
+  margin-top: 12px;
 }
 
 .selector-row {
@@ -191,8 +199,8 @@ h2 {
 
 .subscription-form {
   display: grid;
-  gap: 10px;
-  margin-top: 16px;
+  gap: 8px;
+  margin-top: 12px;
 }
 
 input,
@@ -204,12 +212,12 @@ button {
 input,
 select {
   width: 100%;
-  border-radius: 14px;
+  border-radius: var(--radius);
   border: 1px solid rgba(13, 111, 207, 0.18);
   background: rgba(255, 255, 255, 0.85);
   box-shadow: inset 0 1px 2px rgba(13, 111, 207, 0.05);
   color: var(--text);
-  padding: 12px 14px;
+  padding: 10px 12px;
   outline: none;
 }
 
@@ -220,13 +228,13 @@ input::placeholder {
 textarea {
   width: 100%;
   resize: vertical;
-  min-height: 100px;
-  border-radius: 16px;
+  min-height: 76px;
+  border-radius: var(--radius);
   border: 1px solid rgba(13, 111, 207, 0.18);
   background: rgba(255, 255, 255, 0.85);
   box-shadow: inset 0 1px 2px rgba(13, 111, 207, 0.05);
   color: var(--text);
-  padding: 12px 14px;
+  padding: 10px 12px;
   outline: none;
 }
 
@@ -236,8 +244,8 @@ textarea::placeholder {
 
 button {
   border: 0;
-  border-radius: 14px;
-  padding: 12px 14px;
+  border-radius: var(--radius);
+  padding: 10px 12px;
   font-weight: 700;
   cursor: pointer;
   transition: transform 140ms ease, box-shadow 140ms ease, opacity 140ms ease;
@@ -271,7 +279,7 @@ button:active {
 
 .ghost.small {
   padding: 8px 12px;
-  border-radius: 12px;
+  border-radius: var(--radius);
 }
 
 .switch {
@@ -287,6 +295,10 @@ button:active {
 
 .switch input {
   position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
   opacity: 0;
   pointer-events: none;
 }
@@ -336,13 +348,13 @@ button:active {
 
 .rules-list {
   display: grid;
-  gap: 10px;
-  margin-top: 16px;
+  gap: 8px;
+  margin-top: 12px;
 }
 
 .selector-card {
-  padding: 16px;
-  border-radius: 18px;
+  padding: 12px;
+  border-radius: var(--radius);
   border: 1px solid rgba(13, 111, 207, 0.13);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(238, 248, 255, 0.84));
@@ -358,13 +370,17 @@ button:active {
 .selector-card-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-  margin-top: 12px;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.sync-card .selector-card-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .selector-stat {
-  padding: 10px 12px;
-  border-radius: 14px;
+  padding: 8px 10px;
+  border-radius: var(--radius);
   background: rgba(255, 255, 255, 0.82);
   border: 1px solid rgba(13, 111, 207, 0.12);
 }
@@ -377,30 +393,30 @@ button:active {
 }
 
 .selector-stat-value {
-  margin-top: 4px;
+  margin-top: 2px;
   color: var(--text);
   font-weight: 700;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
   word-break: break-word;
 }
 
 .selector-card-note {
-  margin-top: 12px;
+  margin-top: 8px;
   color: var(--muted);
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 1.4;
 }
 
 .selector-actions {
   justify-content: flex-end;
-  margin-top: 12px;
+  margin-top: 8px;
 }
 
 .subscription-card {
   display: grid;
-  gap: 12px;
-  padding: 16px;
-  border-radius: 18px;
+  gap: 8px;
+  padding: 12px;
+  border-radius: var(--radius);
   border: 1px solid rgba(13, 111, 207, 0.13);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(238, 248, 255, 0.84));
@@ -416,7 +432,7 @@ button:active {
 .subscription-card-description {
   color: var(--text);
   font-size: 13px;
-  line-height: 1.6;
+  line-height: 1.45;
   white-space: pre-wrap;
 }
 
@@ -427,7 +443,7 @@ button:active {
 .subscription-source {
   color: rgba(12, 58, 99, 0.54);
   font-size: 11px;
-  line-height: 1.5;
+  line-height: 1.4;
   word-break: break-word;
 }
 
@@ -475,17 +491,17 @@ button:active {
 .utility-actions {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-  margin-top: 16px;
+  gap: 8px;
+  margin-top: 12px;
 }
 
 .rule-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 14px;
-  border-radius: 16px;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius);
   border: 1px solid rgba(13, 111, 207, 0.12);
   background: rgba(255, 255, 255, 0.72);
 }
@@ -496,7 +512,7 @@ button:active {
 
 .rule-host {
   font-weight: 700;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -547,12 +563,45 @@ button:active {
 
 .rule-actions button {
   padding: 8px 10px;
-  border-radius: 12px;
+  border-radius: var(--radius);
 }
 
 @media (max-width: 900px) {
+  .page {
+    width: calc(100% - 24px);
+    padding: 16px 0 20px;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
   .grid {
     grid-template-columns: 1fr;
+  }
+
+  .card.desktop-half {
+    grid-column: 1 / -1;
+  }
+
+  .card-head > * {
+    min-width: 0;
+  }
+
+  .card-head {
+    flex-wrap: wrap;
+  }
+
+  .card-head .badge {
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    text-align: right;
+  }
+
+  .badge-group {
+    max-width: 100%;
+    justify-content: flex-start;
   }
 
   .form-row {
@@ -576,6 +625,10 @@ button:active {
   }
 
   .selector-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sync-card .selector-card-grid {
     grid-template-columns: 1fr;
   }
 }
