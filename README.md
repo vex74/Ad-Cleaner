@@ -14,8 +14,8 @@
 
 ## 直接下载
 
-- 最新版 ZIP：[ad-cleaner-extension.zip](https://github.com/vex74/ad-cleaner-extension/releases/latest/download/ad-cleaner-extension.zip)
-- 最新版 CRX：[ad-cleaner-extension-release.crx](https://github.com/vex74/ad-cleaner-extension/releases/latest/download/ad-cleaner-extension-release.crx)
+- 最新版 ZIP：[ad-cleaner-extension.zip](https://github.com/vex74/Ad-Cleaner/releases/latest/download/ad-cleaner-extension.zip)
+- 最新版 CRX：[ad-cleaner-extension-release.crx](https://github.com/vex74/Ad-Cleaner/releases/latest/download/ad-cleaner-extension-release.crx)
 
 ZIP 适合解压后以“加载已解压的扩展程序”安装；CRX 适合拖入扩展管理页安装（需要开启开发者模式）。
 
