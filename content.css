@@ -2,6 +2,27 @@
   color-scheme: light;
 }
 
+/* Generic ad element hiding - high specificity to override page styles */
+ins.adsbygoogle,
+div[id^="google_ads_"],
+div[id^="div-gpt-ad"],
+div[data-ad-slot],
+div[data-ad-client],
+div[data-ad-container],
+amp-ad,
+amp-embed,
+iframe[src*="doubleclick.net"],
+iframe[src*="googlesyndication.com"],
+iframe[src*="adnxs.com"],
+iframe[src*="amazon-adsystem.com"],
+iframe[src*="taboola.com"],
+iframe[src*="outbrain.com"],
+iframe[id*="adIframe"],
+div[class*="ad-container"][class*="sponsor"],
+div[class*="ad-slot"][class*="google"] {
+  display: none !important;
+}
+
 [data-ad-cleaner-marked="true"] {
   outline: 2px solid rgba(255, 78, 78, 0.95) !important;
   outline-offset: 2px !important;

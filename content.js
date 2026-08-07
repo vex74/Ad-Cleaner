@@ -15,9 +15,11 @@
   const PANEL_ATTR = "data-ad-cleaner-recovery-panel";
   const PICKER_ATTR = "data-ad-cleaner-picker-ui";
   const PICKER_TARGET_ATTR = "data-ad-cleaner-picker-target";
-  const MAX_SELECTOR_LENGTH = 512;
-  const SELECTOR_PER_SITE_SOFT_LIMIT = 200;
+  const MAX_SELECTOR_LENGTH = 1024;
+  const SELECTOR_PER_SITE_SOFT_LIMIT = 300;
   const SCAN_THROTTLE_MS = 120;
+  const SCAN_SELECTOR_DEADLINE_MS = 400;
+  const SCAN_SELECTOR_MAX_ELEMENTS = 800;
 
   const VOID_TAGS = new Set([
     "AREA",
@@ -84,15 +86,64 @@
     "adtrafficquality.google",
     "ad.doubleclick.net",
     "pagead2.googlesyndication.com",
-    "tpc.googlesyndication.com"
+    "tpc.googlesyndication.com",
+    "appnexus.com",
+    "pulsepoint.com",
+    "mathtag.com",
+    "bluekai.com",
+    "turn.com",
+    "loopme.com",
+    "chartboost.com",
+    "applovin.com",
+    "ironsrc.com",
+    "vungle.com",
+    "inmobi.com",
+    "mintegral.com",
+    "unityads.unity3d.com",
+    "moat.com",
+    "adroll.com",
+    "connect.facebook.net",
+    "analytics.twitter.com",
+    "ads.linkedin.com",
+    "tanx.com",
+    "mediav.com",
+    "pos.baidu.com",
+    "cpro.baidu.com",
+    "mobads.baidu.com",
+    "cnzz.com",
+    "umeng.com",
+    "umeng.co",
+    "tanx.cn",
+    "als.baidu.com",
+    "hmma.baidu.com",
+    "hotjar.com",
+    "amplitude.com",
+    "clarity.ms",
+    "fullstory.com",
+    "adsterra.com",
+    "propellerads.com",
+    "popads.net",
+    "popcash.net",
+    "admaven.com",
+    "exoclick.com",
+    "juicyads.com",
+    "trafficjunky.com",
+    "adtelligent.com",
+    "triplelift.com",
+    "buysellads.com",
+    "carbonads.com",
+    "adsense.com",
+    "moatads.com",
+    "adtrafficquality.google",
+    "adservice.google.com"
   ];
 
   const AD_KEYWORD_RE =
-    /(^|[^a-z0-9])(adsbygoogle|doubleclick|googlesyndication|googletagservices|googleadservices|adnxs|criteo|rubiconproject|pubmatic|openx|taboola|outbrain|teads|moatads|quantserve|yieldmo|zedo|casalemedia|contextweb|amazon-adsystem|adform|smaato|33across|gumgum|scorecardresearch|xandr|smartadserver|serving-sys|adsrvr|adkernel|sharethrough|revcontent|mgid|nativo|connatix|indexww|mediago|adslot|adunit|adserver|adtrafficquality|advert|advertisement|sponsor(?:ed|ship)?|promoted?|promo(?:tion)?)([^a-z0-9]|$)/i;
-  const CJK_AD_LABEL_RE = /(广告位|广告内容|广告推广|广告横幅|横幅广告|侧栏广告|内联文章广告|视频广告|广告弹窗|广告链接|赞助内容|赞助商|推广内容|推广链接|商业推广|合作推广|推荐广告)/;
-  const AD_LABEL_RE = /(sponsored|promoted|partner content|paid content|brand story|branded content|ad choices|ad label|commercial|commercial break|skip ad|广告位|广告内容|广告推广|广告横幅|横幅广告|侧栏广告|内联文章广告|视频广告|广告弹窗|广告链接|赞助内容|赞助商|推广内容|推广链接|商业推广|合作推广|推荐广告)/i;
-  const STRONG_AD_COPY_RE = /(featured promotion|limited time offer|recommended product|sponsored by|branded content|partner content|buy now|advertisement)/i;
-  const DIRECT_AD_TOKEN_RE = /(^|[^a-z0-9])(ad|ads|ad-slot|ad-container|advert|advertisement|sponsor(?:ed|ship)?|promo(?:tion)?)([^a-z0-9]|$)/i;
+    /(^|[^a-z0-9])(adsbygoogle|doubleclick|googlesyndication|googletagservices|googleadservices|adnxs|criteo|rubiconproject|pubmatic|openx|taboola|outbrain|teads|moatads|quantserve|yieldmo|zedo|casalemedia|contextweb|amazon-adsystem|adform|smaato|33across|gumgum|scorecardresearch|xandr|smartadserver|serving-sys|adsrvr|adkernel|sharethrough|revcontent|mgid|nativo|connatix|indexww|mediago|adslot|adunit|adserver|adtrafficquality|advert|advertisement|sponsor(?:ed|ship)?|promoted?|promo(?:tion)?|appnexus|pulsepoint|mathtag|bluekai|turn\.com|loopme|chartboost|applovin|ironsrc|vungle|inmobi|mintegral|unityads|moat\.com|adroll|adsterra|propellerads|popads|popcash|admaven|exoclick|juicyads|trafficjunky|adtelligent|triplelift|buysellads|carbonads|adsense|adservice|adcontainer|ad-wrapper|ad-banner|ad-block|google_ad|goog_ads|dfp|gpt-ad|adzone|adzone3|ad_iframe|ad_frame|ad-image|ad-img)([^a-z0-9]|$)/i;
+  const CJK_AD_LABEL_RE = /(广告位|广告内容|广告推广|广告横幅|横幅广告|侧栏广告|内联文章广告|视频广告|广告弹窗|广告链接|赞助内容|赞助商|推广内容|推广链接|商业推广|合作推广|推荐广告|广告投放|广告赞助|赞助方|商务合作|合作赞助|广而告之|猜你喜欢|热门推荐|为您推荐)/;
+  const AD_LABEL_RE = /(sponsored|promoted|partner content|paid content|brand story|branded content|ad choices|ad label|commercial|commercial break|skip ad|广告位|广告内容|广告推广|广告横幅|横幅广告|侧栏广告|内联文章广告|视频广告|广告弹窗|广告链接|赞助内容|赞助商|推广内容|推广链接|商业推广|合作推广|推荐广告|广告投放|广告赞助|赞助方|商务合作|合作赞助|广而告之|猜你喜欢|热门推荐|为您推荐)/i;
+  const STRONG_AD_COPY_RE = /(featured promotion|limited time offer|recommended product|sponsored by|branded content|partner content|buy now|advertisement|立即购买|限时优惠|特别推荐|广告赞助)/i;
+  const DIRECT_AD_TOKEN_RE = /(^|[^a-z0-9])(ad|ads|ad-slot|ad-container|ad-wrap|ad-banner|ad-block|ad-box|ad-zone|ad-area|advert|advertisement|sponsor(?:ed|ship)?|promo(?:tion)?|dfp|gpt-ad|adsbygoogle)([^a-z0-9]|$)/i;
   const AD_CONTAINER_TAGS = new Set([
     "ARTICLE",
     "ASIDE",
@@ -154,6 +205,26 @@
     "[data-ad-slot]",
     "[data-ad-unit]",
     "[data-ad-client]",
+    "[data-ad-zone]",
+    "[data-ad-zoneid]",
+    "[data-dfp]",
+    "[data-google-ad]",
+    "[id^=\"ad-\"]",
+    "[id^=\"ads-\"]",
+    "[id$=\"-ad\"]",
+    "[id$=\"-ads\"]",
+    "[id^=\"google_ad\"]",
+    "[id^=\"div-gpt-ad\"]",
+    "[class*=\"ad-\"]",
+    "[class*=\"ads-\"]",
+    "[class*=\"ad_\"]",
+    "[class*=\"adslot\"]",
+    "[class*=\"adzone\"]",
+    "[class*=\"advert\"]",
+    "[class*=\"sponsor\"]",
+    "[class*=\"promo-\"]",
+    "[class*=\"dfp-\"]",
+    "[class*=\"gpt-ad\"]",
     "[aria-label]",
     "[id]",
     "[class]",
@@ -308,8 +379,15 @@
       return false;
     }
 
-    const hasUnsupportedPseudo = /:?:has-text\(|:?:matches-css\(|:?:xpath\(|:?:style\(|:?:remove\(|:?:abp\(|:?:has\([^)]*:has\(/i.test(value);
+    // Block uBlock-extended pseudo-classes that querySelectorAll cannot parse
+    const hasUnsupportedPseudo = /:has-text\(|:matches-css\(|:xpath\(|:style\(|:remove\(|:abp\(|:contains\(|:properties\(|:matches-attr\(|:matches-prop\(/i.test(value);
     if (hasUnsupportedPseudo) {
+      return false;
+    }
+
+    // Block nested :has() (DoS risk), allow single-level :has() (Chrome 105+)
+    const hasCount = (value.match(/:has\(/g) || []).length;
+    if (hasCount > 1) {
       return false;
     }
 
@@ -326,7 +404,7 @@
     }
 
     const selectorDepth = value.split(/>|\+|~/).length + (value.match(/\s+/g) || []).length;
-    if (selectorDepth > 12) {
+    if (selectorDepth > 20) {
       return false;
     }
 
@@ -618,7 +696,7 @@
       return;
     }
 
-    const scanDeadline = Date.now() + 200;
+    const scanDeadline = Date.now() + SCAN_SELECTOR_DEADLINE_MS;
     for (let i = 0; i < selectors.length; i += 1) {
       const selector = selectors[i];
       if (!isSafeCosmeticSelector(selector)) {
@@ -632,7 +710,7 @@
       try {
         const elements = document.querySelectorAll(selector);
         const elementCount = elements.length;
-        if (elementCount > 500) {
+        if (elementCount > SCAN_SELECTOR_MAX_ELEMENTS) {
           continue;
         }
         for (const element of elements) {
@@ -787,18 +865,15 @@
       return null;
     }
 
-    const minimumScore = lowFalsePositiveMode ? 2 : 4;
+    const minimumScore = lowFalsePositiveMode ? 2 : 3;
     if (score < minimumScore) {
-      return null;
-    }
-
-    if (AD_CONTAINER_TAGS.has(tag) && !directAdHint) {
       return null;
     }
 
     if (
       AD_CONTAINER_TAGS.has(tag) &&
-      score < (lowFalsePositiveMode ? 3 : 5) &&
+      !directAdHint &&
+      score < (lowFalsePositiveMode ? 3 : 4) &&
       !matchesAdKeywords(identityText) &&
       !AD_LABEL_RE.test(labelText) &&
       !CJK_AD_LABEL_RE.test(labelText) &&
@@ -865,7 +940,7 @@
       score += 2;
     }
 
-    const minimumScore = directHint || sourceUrl || tag === "IFRAME" || tag === "AMP-AD" || tag === "AMP-EMBED" || tag === "INS" ? 3 : 4;
+    const minimumScore = directHint || sourceUrl || tag === "IFRAME" || tag === "AMP-AD" || tag === "AMP-EMBED" || tag === "INS" ? 2 : 3;
     if (score < minimumScore) {
       return null;
     }
@@ -877,7 +952,7 @@
 
       const childCount = element.children ? element.children.length : 0;
       const textLength = (element.innerText || element.textContent || "").trim().length;
-      if (!directHint && (childCount > 4 || textLength > 260)) {
+      if (!directHint && (childCount > 8 || textLength > 400)) {
         return null;
       }
     }

@@ -879,7 +879,7 @@ function parseCosmeticHosts(hostPart) {
 
 function isSupportedCosmeticSelector(selector) {
   const value = String(selector || "").trim();
-  if (!value || value.length > 512) {
+  if (!value || value.length > 1024) {
     return false;
   }
 
@@ -887,7 +887,14 @@ function isSupportedCosmeticSelector(selector) {
     return false;
   }
 
-  if (/^\+js\(|:?:has-text\(|:?:matches-(?:css|attr|property)\(|^:xpath\(|:?:style\(|:?:remove\(|:?:abp\(|:?:has\([^)]*:has\(/i.test(value)) {
+  // Block uBlock-extended pseudo-classes that querySelectorAll cannot parse
+  if (/^\+js\(|:has-text\(|:matches-(?:css|attr|property|prop)\(|:xpath\(|:style\(|:remove\(|:abp\(|:contains\(|:properties\(/i.test(value)) {
+    return false;
+  }
+
+  // Block nested :has() (DoS risk), allow single-level :has() (Chrome 105+)
+  const hasCount = (value.match(/:has\(/g) || []).length;
+  if (hasCount > 1) {
     return false;
   }
 
@@ -904,7 +911,7 @@ function isSupportedCosmeticSelector(selector) {
   }
 
   const selectorDepth = value.split(/>|\+|~/).length + (value.match(/\s+/g) || []).length;
-  if (selectorDepth > 12) {
+  if (selectorDepth > 20) {
     return false;
   }
 

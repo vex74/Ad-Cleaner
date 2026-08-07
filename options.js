@@ -769,7 +769,7 @@ function normalizeHideRules(value) {
 
 function isSafeCosmeticSelector(selector) {
   const value = String(selector || "").trim();
-  if (!value || value.length > 512) {
+  if (!value || value.length > 1024) {
     return false;
   }
 
@@ -777,7 +777,14 @@ function isSafeCosmeticSelector(selector) {
     return false;
   }
 
-  if (/:?:has-text\(|:?:matches-css\(|:?:xpath\(|:?:style\(|:?:remove\(|:?:abp\(|:?:has\([^)]*:has\(/i.test(value)) {
+  // Block uBlock-extended pseudo-classes that querySelectorAll cannot parse
+  if (/:has-text\(|:matches-css\(|:xpath\(|:style\(|:remove\(|:abp\(|:contains\(|:properties\(|:matches-attr\(|:matches-prop\(/i.test(value)) {
+    return false;
+  }
+
+  // Block nested :has() (DoS risk), allow single-level :has() (Chrome 105+)
+  const hasCount = (value.match(/:has\(/g) || []).length;
+  if (hasCount > 1) {
     return false;
   }
 
@@ -794,7 +801,7 @@ function isSafeCosmeticSelector(selector) {
   }
 
   const selectorDepth = value.split(/>|\+|~/).length + (value.match(/\s+/g) || []).length;
-  if (selectorDepth > 12) {
+  if (selectorDepth > 20) {
     return false;
   }
 
