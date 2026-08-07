@@ -15,6 +15,10 @@
   const PANEL_ATTR = "data-ad-cleaner-recovery-panel";
   const PICKER_ATTR = "data-ad-cleaner-picker-ui";
   const PICKER_TARGET_ATTR = "data-ad-cleaner-picker-target";
+  const MAX_SELECTOR_LENGTH = 512;
+  const SELECTOR_PER_SITE_SOFT_LIMIT = 200;
+  const SCAN_THROTTLE_MS = 120;
+
   const VOID_TAGS = new Set([
     "AREA",
     "BASE",
@@ -160,6 +164,7 @@
   let enabled = true;
   let siteMode = "default";
   let scanQueued = false;
+  let scanTimer = null;
   let observer = null;
   let markedCount = 0;
   let lastReportedMetricsKey = "";
@@ -278,16 +283,54 @@
           ? [selectors]
           : [];
 
-      normalized[hostname] = Array.from(
-        new Set(
-          list
-            .map((selector) => String(selector || "").trim())
-            .filter(Boolean)
-        )
-      );
+      const safeSelectors = [];
+      for (const raw of list) {
+        const selector = String(raw || "").trim();
+        if (!selector || !isSafeCosmeticSelector(selector)) {
+          continue;
+        }
+        safeSelectors.push(selector);
+      }
+
+      normalized[hostname] = Array.from(new Set(safeSelectors)).slice(0, SELECTOR_PER_SITE_SOFT_LIMIT);
     }
 
     return normalized;
+  }
+
+  function isSafeCosmeticSelector(selector) {
+    const value = String(selector || "").trim();
+    if (!value || value.length > MAX_SELECTOR_LENGTH) {
+      return false;
+    }
+
+    if (value.includes("</") || value.includes("/>")) {
+      return false;
+    }
+
+    const hasUnsupportedPseudo = /:?:has-text\(|:?:matches-css\(|:?:xpath\(|:?:style\(|:?:remove\(|:?:abp\(|:?:has\([^)]*:has\(/i.test(value);
+    if (hasUnsupportedPseudo) {
+      return false;
+    }
+
+    const openParens = (value.match(/\(/g) || []).length;
+    const closeParens = (value.match(/\)/g) || []).length;
+    if (openParens !== closeParens) {
+      return false;
+    }
+
+    const openBrackets = (value.match(/\[/g) || []).length;
+    const closeBrackets = (value.match(/\]/g) || []).length;
+    if (openBrackets !== closeBrackets) {
+      return false;
+    }
+
+    const selectorDepth = value.split(/>|\+|~/).length + (value.match(/\s+/g) || []).length;
+    if (selectorDepth > 12) {
+      return false;
+    }
+
+    return true;
   }
 
   function applyRuntimeState() {
@@ -338,10 +381,18 @@
     }
 
     scanQueued = true;
-    queueMicrotask(() => {
+    if (scanTimer) {
+      clearTimeout(scanTimer);
+    }
+    scanTimer = setTimeout(() => {
+      scanTimer = null;
       scanQueued = false;
-      scanDocument();
-    });
+      try {
+        scanDocument();
+      } catch (error) {
+        console.warn("Ad Cleaner scan aborted:", error);
+      }
+    }, SCAN_THROTTLE_MS);
   }
 
   function scanDocument() {
@@ -567,9 +618,23 @@
       return;
     }
 
-    for (const selector of selectors) {
+    const scanDeadline = Date.now() + 200;
+    for (let i = 0; i < selectors.length; i += 1) {
+      const selector = selectors[i];
+      if (!isSafeCosmeticSelector(selector)) {
+        continue;
+      }
+
+      if (Date.now() > scanDeadline) {
+        break;
+      }
+
       try {
         const elements = document.querySelectorAll(selector);
+        const elementCount = elements.length;
+        if (elementCount > 500) {
+          continue;
+        }
         for (const element of elements) {
           if (!(element instanceof Element)) {
             continue;
@@ -581,7 +646,7 @@
 
           const target = resolveAdContainer(element);
           if (target && !isIgnored(target) && !target.closest(`[${MARK_ATTR}="true"]`)) {
-            markElement(target, `${reasonPrefix}:${selector}`);
+            markElement(target, `${reasonPrefix}:${selector.slice(0, 200)}`);
           }
         }
       } catch {
@@ -1115,7 +1180,11 @@
   }
 
   function restoreRecoveredById(id) {
-    const selector = `[${UID_ATTR}="${String(id).replace(/\\/g, "\\\\").replace(/"/g, '\\"')}"]`;
+    const safeId = String(id || "").trim();
+    if (!/^[0-9]+$/.test(safeId)) {
+      return;
+    }
+    const selector = `[${UID_ATTR}="${cssEscape(safeId)}"]`;
     const element = document.querySelector(selector);
     if (!element) {
       return;
@@ -1583,6 +1652,11 @@
   }
 
   function saveManualSelector(selector) {
+    const rawSelector = String(selector || "").trim();
+    if (!rawSelector || !isSafeCosmeticSelector(rawSelector)) {
+      return Promise.reject(new Error("选择器不合法或不安全"));
+    }
+
     return new Promise((resolve, reject) => {
       try {
         chrome.storage.local.get({ [CUSTOM_HIDE_RULES_KEY]: {} }, (items) => {
@@ -1594,8 +1668,8 @@
 
           const nextRules = normalizeHideRules(items[CUSTOM_HIDE_RULES_KEY]);
           const current = new Set(nextRules[currentHostname] || []);
-          current.add(selector);
-          nextRules[currentHostname] = Array.from(current);
+          current.add(rawSelector);
+          nextRules[currentHostname] = Array.from(current).slice(0, SELECTOR_PER_SITE_SOFT_LIMIT);
 
           chrome.storage.local.set({ [CUSTOM_HIDE_RULES_KEY]: nextRules }, () => {
             const setError = chrome.runtime.lastError;
@@ -1756,7 +1830,18 @@
   }
 
   function escapeCssString(value) {
-    return String(value).replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+    const raw = String(value || "");
+    if (typeof CSS !== "undefined" && typeof CSS.escape === "function") {
+      return CSS.escape(raw).replace(/\n/g, "\\A ");
+    }
+    return raw
+      .replace(/\\/g, "\\\\")
+      .replace(/"/g, '\\"')
+      .replace(/\n/g, "\\A ")
+      .replace(/\r/g, "\\D ")
+      .replace(/\t/g, "\\9 ")
+      .replace(/'/g, "\\'")
+      .replace(/\f/g, "\\C ");
   }
 
   function buildPickerOverlay() {

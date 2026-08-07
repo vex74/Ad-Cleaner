@@ -275,19 +275,41 @@ async function addSelectorFromForm() {
     return;
   }
 
-  const selectors = String(elements.selectorInput.value || "")
+  const rawInputs = String(elements.selectorInput.value || "")
     .split(/\n+/)
     .map((item) => item.trim())
     .filter(Boolean);
 
-  if (!selectors.length) {
+  if (!rawInputs.length) {
     setSettingsStatus("请输入选择器");
+    return;
+  }
+
+  const validSelectors = [];
+  const invalidSelectors = [];
+  for (const selector of rawInputs) {
+    if (isSafeCosmeticSelector(selector)) {
+      try {
+        document.createElement("div").querySelector?.(selector);
+        validSelectors.push(selector);
+      } catch {
+        invalidSelectors.push(selector);
+      }
+    } else {
+      invalidSelectors.push(selector);
+    }
+  }
+
+  if (!validSelectors.length) {
+    setSettingsStatus(invalidSelectors.length
+      ? `选择器不合法（${invalidSelectors[0].slice(0, 32)}…），未添加`
+      : "选择器为空，未添加");
     return;
   }
 
   const nextRules = { ...customHideRules };
   const current = new Set(nextRules[currentHostname] || []);
-  for (const selector of selectors) {
+  for (const selector of validSelectors) {
     current.add(selector);
   }
 
@@ -296,7 +318,9 @@ async function addSelectorFromForm() {
   await saveSettings({ [STORAGE_KEYS.customHideRules]: customHideRules });
   elements.selectorInput.value = "";
   renderSelectors();
-  setSettingsStatus(`已添加 ${selectors.length} 个选择器`);
+  setSettingsStatus(invalidSelectors.length
+    ? `已添加 ${validSelectors.length} 个选择器，跳过 ${invalidSelectors.length} 个不合法项`
+    : `已添加 ${validSelectors.length} 个选择器`);
 }
 
 async function addSubscriptionFromForm() {
@@ -728,16 +752,53 @@ function normalizeHideRules(value) {
         ? [selectors]
         : [];
 
-    normalized[hostname] = Array.from(
-      new Set(
-        list
-          .map((selector) => String(selector || "").trim())
-          .filter(Boolean)
-      )
-    );
+    const safeSelectors = [];
+    for (const raw of list) {
+      const selector = String(raw || "").trim();
+      if (!selector || !isSafeCosmeticSelector(selector)) {
+        continue;
+      }
+      safeSelectors.push(selector);
+    }
+
+    normalized[hostname] = Array.from(new Set(safeSelectors)).slice(0, 200);
   }
 
   return normalized;
+}
+
+function isSafeCosmeticSelector(selector) {
+  const value = String(selector || "").trim();
+  if (!value || value.length > 512) {
+    return false;
+  }
+
+  if (value.includes("</") || value.includes("/>")) {
+    return false;
+  }
+
+  if (/:?:has-text\(|:?:matches-css\(|:?:xpath\(|:?:style\(|:?:remove\(|:?:abp\(|:?:has\([^)]*:has\(/i.test(value)) {
+    return false;
+  }
+
+  const openParens = (value.match(/\(/g) || []).length;
+  const closeParens = (value.match(/\)/g) || []).length;
+  if (openParens !== closeParens) {
+    return false;
+  }
+
+  const openBrackets = (value.match(/\[/g) || []).length;
+  const closeBrackets = (value.match(/\]/g) || []).length;
+  if (openBrackets !== closeBrackets) {
+    return false;
+  }
+
+  const selectorDepth = value.split(/>|\+|~/).length + (value.match(/\s+/g) || []).length;
+  if (selectorDepth > 12) {
+    return false;
+  }
+
+  return true;
 }
 
 function normalizeSubscriptions(value) {

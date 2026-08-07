@@ -10,9 +10,11 @@ const PRIVACY_COVERAGE_RULESET_ID = "privacy-coverage";
 const ALWAYS_ACTIVE_RULESET_ID = "always-active";
 const DYNAMIC_ALLOW_RULE_BASE = 1_000_000;
 const DYNAMIC_SUB_RULE_BASE = 2_000_000;
-const DYNAMIC_RULE_LIMIT = 3_000_000;
+const DYNAMIC_RULE_CEILING = 3_000_000;
 const MAX_DYNAMIC_RULES = 30000;
 const MAX_COMPILED_SUBSCRIPTION_RULES = 29000;
+const MAX_SUBSCRIPTION_RESPONSE_BYTES = 5 * 1024 * 1024;
+const SUBSCRIPTION_FETCH_TIMEOUT_MS = 10000;
 const MAX_DOMAINS_PER_COMPACT_RULE = 500;
 const BADGE_BACKGROUND_COLOR = "#ff5d65";
 const BADGE_REFRESH_INTERVAL_MS = 5000;
@@ -408,7 +410,7 @@ function buildAllowRules(siteRules) {
 }
 
 function isDynamicRuleId(ruleId) {
-  return ruleId >= DYNAMIC_ALLOW_RULE_BASE && ruleId < DYNAMIC_RULE_LIMIT;
+  return Number.isInteger(ruleId) && ruleId >= DYNAMIC_ALLOW_RULE_BASE && ruleId < DYNAMIC_RULE_CEILING;
 }
 
 function normalizeSiteRules(value) {
@@ -621,13 +623,23 @@ async function loadSubscriptionText(subscription) {
       };
     }
 
+    if (isUnsafeSubscriptionHost(sourceUrl)) {
+      return {
+        text: "",
+        errorMessage: "订阅地址指向内网或保留网段，已拒绝加载"
+      };
+    }
+
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 10000);
+    const timeout = setTimeout(() => controller.abort(), SUBSCRIPTION_FETCH_TIMEOUT_MS);
     let response;
     try {
       response = await fetch(sourceUrl, {
         signal: controller.signal,
-        cache: "no-store"
+        cache: "no-store",
+        credentials: "omit",
+        redirect: "follow",
+        referrerPolicy: "no-referrer"
       });
     } finally {
       clearTimeout(timeout);
@@ -639,7 +651,48 @@ async function loadSubscriptionText(subscription) {
       };
     }
 
-    const text = await response.text();
+    const contentLength = Number(response.headers.get("content-length") || 0);
+    if (Number.isFinite(contentLength) && contentLength > MAX_SUBSCRIPTION_RESPONSE_BYTES) {
+      return {
+        text: "",
+        errorMessage: `订阅体积过大（${Math.round(contentLength / 1024 / 1024)}MB），已拒绝加载`
+      };
+    }
+
+    let text = "";
+    if (response.body?.getReader) {
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+      let received = 0;
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) {
+          break;
+        }
+        received += value.byteLength;
+        if (received > MAX_SUBSCRIPTION_RESPONSE_BYTES) {
+          reader.releaseLock?.();
+          try {
+            await response.body.cancel();
+          } catch {}
+          return {
+            text: "",
+            errorMessage: "订阅体积超过 5MB 上限，已中断加载"
+          };
+        }
+        text += decoder.decode(value, { stream: true });
+      }
+      text += decoder.decode();
+    } else {
+      text = await response.text();
+      if (text.length > MAX_SUBSCRIPTION_RESPONSE_BYTES) {
+        return {
+          text: "",
+          errorMessage: "订阅体积超过 5MB 上限，已拒绝加载"
+        };
+      }
+    }
+
     if (looksLikeHtmlPage(text)) {
       return {
         text: "",
@@ -826,11 +879,36 @@ function parseCosmeticHosts(hostPart) {
 
 function isSupportedCosmeticSelector(selector) {
   const value = String(selector || "").trim();
-  if (!value || value.length > 1024) {
+  if (!value || value.length > 512) {
     return false;
   }
 
-  return !/^\+js\(|^:has-text\(|^:matches-(?:css|attr|property)\(|^:xpath\(|^:style\(|^:remove\(/i.test(value);
+  if (value.includes("</") || value.includes("/>")) {
+    return false;
+  }
+
+  if (/^\+js\(|:?:has-text\(|:?:matches-(?:css|attr|property)\(|^:xpath\(|:?:style\(|:?:remove\(|:?:abp\(|:?:has\([^)]*:has\(/i.test(value)) {
+    return false;
+  }
+
+  const openParens = (value.match(/\(/g) || []).length;
+  const closeParens = (value.match(/\)/g) || []).length;
+  if (openParens !== closeParens) {
+    return false;
+  }
+
+  const openBrackets = (value.match(/\[/g) || []).length;
+  const closeBrackets = (value.match(/\]/g) || []).length;
+  if (openBrackets !== closeBrackets) {
+    return false;
+  }
+
+  const selectorDepth = value.split(/>|\+|~/).length + (value.match(/\s+/g) || []).length;
+  if (selectorDepth > 12) {
+    return false;
+  }
+
+  return true;
 }
 
 function parseSubscriptionMetadata(text) {
@@ -1288,6 +1366,54 @@ function normalizeSubscriptionUrl(source) {
 
     return "";
   }
+}
+
+function isUnsafeSubscriptionHost(sourceUrl) {
+  let hostname = "";
+  try {
+    hostname = new URL(sourceUrl).hostname.toLowerCase();
+  } catch {
+    return true;
+  }
+
+  if (!hostname) {
+    return true;
+  }
+
+  if (hostname === "localhost" || hostname.endsWith(".localhost")) {
+    return true;
+  }
+
+  if (hostname === "localhost.localdomain" || hostname.endsWith(".internal")) {
+    return true;
+  }
+
+  if (/^\d+\.\d+\.\d+\.\d+$/.test(hostname)) {
+    const parts = hostname.split(".").map(Number);
+    if (parts.length !== 4 || parts.some((n) => !Number.isFinite(n) || n < 0 || n > 255)) {
+      return true;
+    }
+    const [a, b] = parts;
+    if (a === 0) return true;
+    if (a === 10) return true;
+    if (a === 127) return true;
+    if (a === 169 && b === 254) return true;
+    if (a === 172 && b >= 16 && b <= 31) return true;
+    if (a === 192 && b === 168) return true;
+    if (a === 198 && (b === 18 || b === 19)) return true;
+    if (a === 203 && b === 0 && parts[2] === 113) return true;
+    if (a >= 224) return true;
+  }
+
+  if (hostname.includes(":")) {
+    const normalized = hostname.replace(/^\[|\]$/g, "").toLowerCase();
+    if (normalized.startsWith("::1") || normalized === "::") return true;
+    if (normalized.startsWith("fc") || normalized.startsWith("fd")) return true;
+    if (normalized.startsWith("fe80")) return true;
+    if (normalized.startsWith("ff")) return true;
+  }
+
+  return false;
 }
 
 function reportSyncError(error) {
