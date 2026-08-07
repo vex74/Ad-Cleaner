@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ad Cleaner — 隐私政策 / Privacy Policy</title>
+<style>
+  body { max-width: 760px; margin: 40px auto; padding: 0 20px; font-family: system-ui, -apple-system, sans-serif; line-height: 1.7; color: #1a1a1a; }
+  h1 { font-size: 1.6em; border-bottom: 2px solid #4A90D9; padding-bottom: 8px; }
+  h2 { font-size: 1.2em; margin-top: 1.8em; color: #2c5282; }
+  p, li { font-size: 0.95em; }
+  code { background: #f0f0f0; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+  .en { color: #666; font-style: italic; }
+  strong { color: #c0392b; }
+  .footer { margin-top: 3em; padding-top: 1em; border-top: 1px solid #ddd; font-size: 0.85em; color: #999; }
+</style>
+</head>
+<body>
+
+<h1>Ad Cleaner — 隐私政策</h1>
+<p class="en">Ad Cleaner — Privacy Policy</p>
+<p><em>最后更新 / Last updated: 2026-08-07</em></p>
+
+<h2>1. 概述 / Overview</h2>
+<p>Ad Cleaner（以下简称"本扩展"）是一款浏览器扩展，用于拦截广告网络请求并隐藏页面上的广告元素。本扩展的设计目标是在用户本地设备上完全运行。</p>
+<p class="en">Ad Cleaner ("the extension") is a browser extension that blocks ad network requests and hides on-page ad elements. The extension is designed to operate entirely on the user's local device.</p>
+
+<h2>2. 我们收集的数据 / Data We Collect</h2>
+<p><strong>本扩展不收集任何用户数据。</strong>本扩展不收集、不存储、不传输任何个人身份信息、浏览历史、搜索查询、键盘输入或页面内容。</p>
+<p class="en"><strong>The extension collects zero user data.</strong> It does not collect, store, or transmit any personally identifiable information, browsing history, search queries, keystrokes, or page contents.</p>
+
+<h2>3. 本地存储使用 / Storage Usage</h2>
+<p>所有用户偏好设置（自定义规则、白名单站点、订阅列表、恢复记录、拦截统计计数）均存储在浏览器的 <code>chrome.storage.local</code> API 中，仅存在于用户设备本地，不会离开用户设备。</p>
+<p class="en">All user preferences (custom rules, allowlist sites, subscriptions, restore records, blocked counts) are stored exclusively in the browser's <code>chrome.storage.local</code> API. These settings never leave the user's device.</p>
+
+<h2>4. 网络访问 / Network Access</h2>
+<p>本扩展仅在以下两种情况下发起网络请求：</p>
+<ul>
+  <li><strong>声明式网络请求拦截</strong>：由浏览器网络栈在用户访问的页面发出子请求时进行匹配拦截，本扩展不读取请求或响应的内容。</li>
+  <li><strong>订阅列表下载</strong>：仅当用户手动添加第三方过滤列表 URL 时，本扩展会按刷新周期下载该规则列表。下载的列表存储在本地，不会转发给任何第三方。</li>
+</ul>
+<p class="en">The extension issues network requests for only two purposes: (1) Declarative Net Request blocking handled inside the browser's network stack without reading contents; (2) If the user manually adds a filter-list subscription URL, the extension fetches that list periodically. Downloaded lists are stored locally and never forwarded.</p>
+
+<h2>5. 第三方服务 / Third-Party Services</h2>
+<p>本扩展不集成任何第三方分析、广告或遥测服务。</p>
+<p class="en">The extension does not integrate with any third-party analytics, advertising, or telemetry services.</p>
+
+<h2>6. 权限说明 / Permissions</h2>
+<ul>
+  <li><code>declarativeNetRequest</code> — 拦截广告网络请求，不读取内容</li>
+  <li><code>storage</code> — 本地保存用户设置，不上传</li>
+  <li><code>tabs / activeTab</code> — 显示当前页面拦截统计，不记录历史</li>
+  <li><code>&lt;all_urls&gt;</code> — 在所有网站执行拦截，不主动访问网站</li>
+</ul>
+
+<h2>7. 儿童隐私 / Children's Privacy</h2>
+<p>本扩展不针对 13 岁以下儿童，也不故意收集任何人的信息。</p>
+<p class="en">The extension is not directed to children under 13 and does not knowingly collect information from anyone.</p>
+
+<h2>8. 开源透明 / Open Source</h2>
+<p>本扩展代码完全开源，托管于 <a href="https://github.com/vex74/Ad-Cleaner">github.com/vex74/Ad-Cleaner</a>，任何人均可自行审计。</p>
+<p class="en">The extension is fully open source at <a href="https://github.com/vex74/Ad-Cleaner">github.com/vex74/Ad-Cleaner</a> and can be audited by anyone.</p>
+
+<h2>9. 联系方式 / Contact</h2>
+<p>如有隐私相关问题，请在 GitHub 仓库提交 Issue：<a href="https://github.com/vex74/Ad-Cleaner/issues">github.com/vex74/Ad-Cleaner/issues</a></p>
+<p class="en">For privacy questions, please open an issue at: <a href="https://github.com/vex74/Ad-Cleaner/issues">github.com/vex74/Ad-Cleaner/issues</a></p>
+
+<div class="footer">
+  © 2026 Ad Cleaner. This privacy policy applies to the Ad Cleaner browser extension only.
+</div>
+
+</body>
+</html>
