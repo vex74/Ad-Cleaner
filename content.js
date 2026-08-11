@@ -140,9 +140,9 @@
 
   const AD_KEYWORD_RE =
     /(^|[^a-z0-9])(adsbygoogle|doubleclick|googlesyndication|googletagservices|googleadservices|adnxs|criteo|rubiconproject|pubmatic|openx|taboola|outbrain|teads|moatads|quantserve|yieldmo|zedo|casalemedia|contextweb|amazon-adsystem|adform|smaato|33across|gumgum|scorecardresearch|xandr|smartadserver|serving-sys|adsrvr|adkernel|sharethrough|revcontent|mgid|nativo|connatix|indexww|mediago|adslot|adunit|adserver|adtrafficquality|advert|advertisement|sponsor(?:ed|ship)?|promoted?|promo(?:tion)?|appnexus|pulsepoint|mathtag|bluekai|turn\.com|loopme|chartboost|applovin|ironsrc|vungle|inmobi|mintegral|unityads|moat\.com|adroll|adsterra|propellerads|popads|popcash|admaven|exoclick|juicyads|trafficjunky|adtelligent|triplelift|buysellads|carbonads|adsense|adservice|adcontainer|ad-wrapper|ad-banner|ad-block|google_ad|goog_ads|dfp|gpt-ad|adzone|adzone3|ad_iframe|ad_frame|ad-image|ad-img)([^a-z0-9]|$)/i;
-  const CJK_AD_LABEL_RE = /(广告位|广告内容|广告推广|广告横幅|横幅广告|侧栏广告|内联文章广告|视频广告|广告弹窗|广告链接|赞助内容|赞助商|推广内容|推广链接|商业推广|合作推广|推荐广告|广告投放|广告赞助|赞助方|商务合作|合作赞助|广而告之|猜你喜欢|热门推荐|为您推荐)/;
-  const AD_LABEL_RE = /(sponsored|promoted|partner content|paid content|brand story|branded content|ad choices|ad label|commercial|commercial break|skip ad|广告位|广告内容|广告推广|广告横幅|横幅广告|侧栏广告|内联文章广告|视频广告|广告弹窗|广告链接|赞助内容|赞助商|推广内容|推广链接|商业推广|合作推广|推荐广告|广告投放|广告赞助|赞助方|商务合作|合作赞助|广而告之|猜你喜欢|热门推荐|为您推荐)/i;
-  const STRONG_AD_COPY_RE = /(featured promotion|limited time offer|recommended product|sponsored by|branded content|partner content|buy now|advertisement|立即购买|限时优惠|特别推荐|广告赞助)/i;
+  const CJK_AD_LABEL_RE = /(广告位|广告内容|广告推广|广告横幅|横幅广告|侧栏广告|内联文章广告|视频广告|广告弹窗|广告链接|赞助内容|赞助商|推广内容|推广链接|商业推广|合作推广|推荐广告|广告投放|广告赞助|赞助方|合作赞助)/;
+  const AD_LABEL_RE = /(sponsored|promoted|partner content|paid content|brand story|branded content|ad choices|ad label|commercial break|skip ad|广告位|广告内容|广告推广|广告横幅|横幅广告|侧栏广告|内联文章广告|视频广告|广告弹窗|广告链接|赞助内容|赞助商|推广内容|推广链接|商业推广|合作推广|推荐广告|广告投放|广告赞助|赞助方|合作赞助)/i;
+  const STRONG_AD_COPY_RE = /(sponsored by|branded content|partner content|advertisement|广告赞助)/i;
   const DIRECT_AD_TOKEN_RE = /(^|[^a-z0-9])(ad|ads|ad-slot|ad-container|ad-wrap|ad-banner|ad-block|ad-box|ad-zone|ad-area|advert|advertisement|sponsor(?:ed|ship)?|promo(?:tion)?|dfp|gpt-ad|adsbygoogle)([^a-z0-9]|$)/i;
   const AD_CONTAINER_TAGS = new Set([
     "ARTICLE",
@@ -865,7 +865,7 @@
       return null;
     }
 
-    const minimumScore = lowFalsePositiveMode ? 2 : 3;
+    const minimumScore = lowFalsePositiveMode ? 2 : 4;
     if (score < minimumScore) {
       return null;
     }
@@ -873,7 +873,7 @@
     if (
       AD_CONTAINER_TAGS.has(tag) &&
       !directAdHint &&
-      score < (lowFalsePositiveMode ? 3 : 4) &&
+      score < (lowFalsePositiveMode ? 3 : 5) &&
       !matchesAdKeywords(identityText) &&
       !AD_LABEL_RE.test(labelText) &&
       !CJK_AD_LABEL_RE.test(labelText) &&
