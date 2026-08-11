@@ -83,3 +83,15 @@ test("still classifies explicit ad banners", () => {
   assert.equal(findAdTarget(adBanner), adBanner);
   assert.equal(findAdTarget(bannerAd), bannerAd);
 });
+
+test("does not classify generic recommendation copy as an advertisement", () => {
+  const { findAdTarget } = loadHeuristics();
+
+  for (const text of ["猜你喜欢", "热门推荐", "为您推荐"]) {
+    const recommendation = new FakeElement({
+      className: "recommendation-panel",
+      text
+    });
+    assert.equal(findAdTarget(recommendation), null, text);
+  }
+});
