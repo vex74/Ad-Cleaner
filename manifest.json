@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Ad Cleaner",
-  "version": "0.9.24",
+  "version": "0.9.25",
   "description": "Blocks common ad requests and lets users hide unwanted page elements with local and subscribed filter rules.",
   "icons": {
     "16": "icons/icon-16.png",

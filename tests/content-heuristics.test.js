@@ -5,10 +5,11 @@ const test = require("node:test");
 const vm = require("node:vm");
 
 class FakeElement {
-  constructor({ className = "", text = "", tagName = "DIV" } = {}) {
+  constructor({ className = "", id = "", role = "", text = "", tagName = "DIV" } = {}) {
     this.tagName = tagName;
     this.className = className;
-    this.id = "";
+    this.id = id;
+    this.role = role;
     this.dataset = {};
     this.innerText = text;
     this.textContent = text;
@@ -19,6 +20,12 @@ class FakeElement {
   getAttribute(name) {
     if (name === "class") {
       return this.className;
+    }
+    if (name === "id") {
+      return this.id;
+    }
+    if (name === "role") {
+      return this.role;
     }
     return null;
   }
@@ -36,15 +43,16 @@ class FakeElement {
   }
 }
 
-function loadHeuristics() {
+function loadHeuristics(url = "https://www.zhipin.com/job_detail/example.html") {
   const contentPath = path.join(__dirname, "..", "content.js");
   const source = fs
     .readFileSync(contentPath, "utf8")
     .replace("  init();", "  // init disabled by heuristic tests")
     .replace(
       /\}\)\(\);\s*$/,
-      "  globalThis.__adCleanerTestApi = { findAdTarget };\n})();"
+      "  globalThis.__adCleanerTestApi = { findAdTarget, shouldApplyCosmeticRule: typeof shouldApplyCosmeticRule === 'function' ? shouldApplyCosmeticRule : undefined };\n})();"
     );
+  const parsedUrl = new URL(url);
   const documentElement = { clientWidth: 1440, clientHeight: 900 };
   const context = {
     Element: FakeElement,
@@ -57,9 +65,9 @@ function loadHeuristics() {
       innerWidth: 1440,
       innerHeight: 900,
       location: {
-        href: "https://www.zhipin.com/job_detail/example.html",
-        hostname: "www.zhipin.com",
-        pathname: "/job_detail/example.html"
+        href: parsedUrl.href,
+        hostname: parsedUrl.hostname,
+        pathname: parsedUrl.pathname
       }
     }
   };
@@ -100,5 +108,49 @@ test("does not classify generic commerce or recommendation copy as an advertisem
       text
     });
     assert.equal(findAdTarget(recommendation), null, text);
+  }
+});
+
+test("protects DNB membership purchase UI from subscription cosmetic rules", () => {
+  const { shouldApplyCosmeticRule } = loadHeuristics(
+    "https://search.dnbcha.com/vip?from=top_vip_btn"
+  );
+
+  assert.equal(typeof shouldApplyCosmeticRule, "function");
+  assert.equal(
+    shouldApplyCosmeticRule(
+      new FakeElement({ className: "vip-card vip-card-active", text: "1年内地VIP 立即开通" }),
+      "subscription-selector"
+    ),
+    false
+  );
+  assert.equal(
+    shouldApplyCosmeticRule(
+      new FakeElement({ className: "el-dialog dnb-dialog", role: "dialog", text: "会员支付 同意并支付" }),
+      "subscription-selector"
+    ),
+    false
+  );
+  assert.equal(
+    shouldApplyCosmeticRule(
+      new FakeElement({ className: "vip-card", text: "1年内地VIP 立即开通" }),
+      "custom-selector"
+    ),
+    true
+  );
+});
+
+test("limits DNB membership protection to the exact VIP route", () => {
+  const element = new FakeElement({ className: "vip-card", text: "立即开通" });
+
+  for (const url of [
+    "https://search.dnbcha.com/vip/orders",
+    "https://search.dnbcha.com/VIP",
+    "https://search.dnbcha.com/company",
+    "https://www.search.dnbcha.com/vip",
+    "https://example.com/vip"
+  ]) {
+    const { shouldApplyCosmeticRule } = loadHeuristics(url);
+    assert.equal(shouldApplyCosmeticRule(element, "subscription-selector"), true, url);
   }
 });

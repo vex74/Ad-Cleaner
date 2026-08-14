@@ -155,6 +155,7 @@
   const TEXT_ONLY_TAGS = new Set(["H1", "H2", "H3", "H4", "H5", "H6", "P", "A", "BUTTON", "SPAN"]);
   const TRYBLOCK_BASIC_PAGE_RE = /^\/zh\/adblock-test\/basic\/?$/i;
   const TRYBLOCK_ADBLOCK_TEST_PAGE_RE = /^\/zh\/adblock-test\/(?:basic|intermediate|advanced)\/?$/i;
+  const DNB_MEMBERSHIP_PAGE_RE = /^\/vip\/?$/;
   const TRYBLOCK_TEST_MATCHERS = [
     {
       name: "banner",
@@ -723,7 +724,12 @@
           }
 
           const target = resolveAdContainer(element);
-          if (target && !isIgnored(target) && !target.closest(`[${MARK_ATTR}="true"]`)) {
+          if (
+            target &&
+            shouldApplyCosmeticRule(target, reasonPrefix) &&
+            !isIgnored(target) &&
+            !target.closest(`[${MARK_ATTR}="true"]`)
+          ) {
             markElement(target, `${reasonPrefix}:${selector.slice(0, 200)}`);
           }
         }
@@ -752,6 +758,24 @@
 
   function hostMatches(ruleHost, hostname) {
     return hostname === ruleHost || hostname.endsWith(`.${ruleHost}`);
+  }
+
+  function shouldApplyCosmeticRule(element, reasonPrefix) {
+    if (!(element instanceof Element)) {
+      return false;
+    }
+
+    if (reasonPrefix !== "subscription-selector") {
+      return true;
+    }
+
+    return !isDnbMembershipPage();
+  }
+
+  function isDnbMembershipPage() {
+    const hostname = String(window.location.hostname || "").toLowerCase();
+    const pathname = String(window.location.pathname || "");
+    return hostname === "search.dnbcha.com" && DNB_MEMBERSHIP_PAGE_RE.test(pathname);
   }
 
   function findAdTarget(element) {

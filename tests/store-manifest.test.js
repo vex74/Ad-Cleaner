@@ -7,12 +7,25 @@ const manifestPath = path.join(__dirname, "..", "manifest.json");
 const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
 
 test("store release uses the next review version", () => {
-  assert.equal(manifest.version, "0.9.24");
+  assert.equal(manifest.version, "0.9.25");
 });
 
 test("store release requests only permissions used by the extension", () => {
   assert.equal(manifest.permissions.includes("activeTab"), false);
   assert.equal(manifest.permissions.includes("tabs"), false);
+});
+
+test("store release keeps declarative network blocking enabled", () => {
+  assert.ok(manifest.permissions.includes("declarativeNetRequest"));
+  const ruleSets = manifest.declarative_net_request?.rule_resources || [];
+  assert.deepEqual(
+    ruleSets.map((item) => [item.id, item.enabled]),
+    [
+      ["core-blocklist", true],
+      ["privacy-coverage", true],
+      ["always-active", true]
+    ]
+  );
 });
 
 test("store release has a concise single-purpose description", () => {
