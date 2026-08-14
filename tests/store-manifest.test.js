@@ -7,7 +7,7 @@ const manifestPath = path.join(__dirname, "..", "manifest.json");
 const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
 
 test("store release uses the next review version", () => {
-  assert.equal(manifest.version, "0.9.23");
+  assert.equal(manifest.version, "0.9.24");
 });
 
 test("store release requests only permissions used by the extension", () => {
@@ -25,4 +25,9 @@ test("extension pages use an explicit restrictive content security policy", () =
   assert.match(policy, /script-src 'self'/);
   assert.match(policy, /object-src 'none'/);
   assert.match(policy, /frame-ancestors 'none'/);
+});
+
+test("content security policy permits user-selected subscription downloads", () => {
+  const policy = manifest.content_security_policy?.extension_pages || "";
+  assert.match(policy, /connect-src https: http:/);
 });
