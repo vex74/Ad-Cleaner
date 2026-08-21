@@ -28,7 +28,7 @@ Ad Cleaner 使用 Manifest V3，结合网络级拦截、页面元素识别、自
 
 ### 使用发布包
 
-`releases/v0.9.27/` 包含：
+GitHub Releases 页面提供 `v0.9.27` 发布附件：
 
 - `Ad-Cleaner-v0.9.27-中英切换版.zip`
 - `Ad-Cleaner-v0.9.27-中英切换版.crx`
