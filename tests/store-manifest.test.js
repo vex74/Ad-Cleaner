@@ -30,7 +30,8 @@ test("store release keeps declarative network blocking enabled", () => {
 
 test("store release has a concise single-purpose description", () => {
   assert.ok(manifest.description.length <= 132);
-  assert.match(manifest.description, /^Blocks common ad requests/);
+  assert.match(manifest.description, /^双语广告清理扩展：/);
+  assert.match(manifest.description, /\/ Bilingual ad cleaner:/);
 });
 
 test("extension pages use an explicit restrictive content security policy", () => {
