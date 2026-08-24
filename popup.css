@@ -604,3 +604,46 @@ html[data-theme="light"] .switch input:checked + .track {
   background: linear-gradient(135deg, #4fa8f0, #0d6fcf);
   border-color: rgba(13, 111, 207, 0.5);
 }
+
+.hero-bar {
+  gap: 8px;
+}
+
+.hero-actions {
+  flex-shrink: 0;
+  gap: 6px;
+}
+
+.eyebrow,
+.theme-switch,
+.language-switch {
+  min-height: 30px;
+  box-sizing: border-box;
+  border-radius: 999px;
+}
+
+.eyebrow {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin-bottom: 0;
+  padding: 3px 10px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  line-height: 1;
+}
+
+.theme-switch,
+.language-switch {
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+}
+
+.theme-switch button,
+.language-switch button {
+  min-height: 22px;
+  padding: 4px 9px;
+  white-space: nowrap;
+  line-height: 1;
+}

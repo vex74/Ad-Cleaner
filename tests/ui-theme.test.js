@@ -30,3 +30,14 @@ test("all extension surfaces use the shared dark sci-fi theme", () => {
   assert.match(contentStyle, /\.ad-cleaner-picker-shell/);
   assert.match(contentStyle, /\.ad-cleaner-panel-shell/);
 });
+
+test("top header controls share a consistent compact capsule layout", () => {
+  for (const fileName of ["options.css", "popup.css"]) {
+    const style = readStyle(fileName);
+
+    assert.match(style, /\.hero-actions\s*\{[\s\S]*?display:\s*inline-flex;[\s\S]*?gap:\s*6px;/);
+    assert.match(style, /\.eyebrow,\s*\.theme-switch,\s*\.language-switch\s*\{[\s\S]*?min-height:\s*30px;[\s\S]*?border-radius:\s*999px;/);
+    assert.match(style, /\.eyebrow\s*\{[\s\S]*?margin-bottom:\s*0;[\s\S]*?white-space:\s*nowrap;/);
+    assert.match(style, /\.theme-switch button,\s*\.language-switch button\s*\{[\s\S]*?min-height:\s*22px;[\s\S]*?white-space:\s*nowrap;/);
+  }
+});
