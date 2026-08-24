@@ -383,7 +383,7 @@ async function clearBadgeForTab(tabId) {
   await chrome.action.setBadgeText({ tabId: numericTabId, text: "" });
   await chrome.action.setTitle({
     tabId: numericTabId,
-    title: "Ad Cleaner"
+    title: "广告清理工具-Ad-Cleaner"
   });
 }
 

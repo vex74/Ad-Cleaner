@@ -1,14 +1,14 @@
-# Ad Cleaner
+# 广告清理工具-Ad-Cleaner
 
-> **中文：** 一个轻量、可控、支持中英双语的 Chrome 广告清理扩展。
+> **中文：** 广告清理工具-Ad-Cleaner 是一个轻量、可控、支持中英双语的 Chrome 广告清理扩展。
 >
-> **English:** A lightweight, controllable Chrome ad-cleaning extension with bilingual UI support.
+> **English:** Ad Cleaner Tool-Ad-Cleaner is a lightweight, controllable Chrome ad-cleaning extension with bilingual UI support.
 
 ## 项目简介 / Overview
 
-**中文**：Ad Cleaner 使用 Manifest V3，结合网络级拦截、页面元素识别、自定义站点规则和过滤订阅，帮助用户减少常见广告与推广内容干扰，同时保留误杀恢复能力。
+**中文**：广告清理工具-Ad-Cleaner 使用 Manifest V3，结合网络级拦截、页面元素识别、自定义站点规则和过滤订阅，帮助用户减少常见广告与推广内容干扰，同时保留误杀恢复能力。
 
-**English:** Ad Cleaner uses Manifest V3, network-level blocking, page element detection, custom site rules, and optional filter subscriptions to reduce common ads and promoted content while preserving recovery controls for false positives.
+**English:** Ad Cleaner Tool-Ad-Cleaner uses Manifest V3, network-level blocking, page element detection, custom site rules, and optional filter subscriptions to reduce common ads and promoted content while preserving recovery controls for false positives.
 
 ## 主要功能 / Features
 

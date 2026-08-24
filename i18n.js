@@ -22,7 +22,7 @@
         cycle: "切换显示模式（当前：{mode}）"
       },
       options: {
-        title: "Ad Cleaner 设置",
+        title: "广告清理工具-Ad-Cleaner 设置",
         heading: "站点规则",
         intro: "把常去的网站加入白名单或黑名单。白名单会放行并停止标记，黑名单会强制启用清理。",
         globalLabel: "全局开关",
@@ -74,7 +74,7 @@
         importHelp: "导入会替换站点规则、选择器和订阅列表，并同时恢复导出的全局开关状态。"
       },
       popup: {
-        title: "Ad Cleaner",
+        title: "广告清理工具-Ad-Cleaner",
         heading: "拦截、标记、清理",
         intro: "自动挡住常见广告请求，并把网页里疑似广告的块高亮出来，方便一键清理。",
         currentPage: "当前页面",
@@ -231,10 +231,10 @@
       background: {
         tabUnavailable: "当前标签页不可诊断",
         diagnosticsUnsupported: "当前浏览器不支持规则命中诊断",
-        pageTitleHidden: "Ad Cleaner · 页面已隐藏 {count} 个广告元素",
-        pageTitleEmpty: "Ad Cleaner · 当前页面暂无广告元素",
-        networkTitleBlocked: "Ad Cleaner · 已拦截 {count} 个链接",
-        networkTitleEmpty: "Ad Cleaner · 当前页面暂无网络命中",
+        pageTitleHidden: "广告清理工具-Ad-Cleaner · 页面已隐藏 {count} 个广告元素",
+        pageTitleEmpty: "广告清理工具-Ad-Cleaner · 当前页面暂无广告元素",
+        networkTitleBlocked: "广告清理工具-Ad-Cleaner · 已拦截 {count} 个链接",
+        networkTitleEmpty: "广告清理工具-Ad-Cleaner · 当前页面暂无网络命中",
         closed: "已关闭",
         loadFailed: "加载失败",
         usingPrevious: "{error}，继续使用上次成功版本",
@@ -268,7 +268,7 @@
         cycle: "Change display mode (current: {mode})"
       },
       options: {
-        title: "Ad Cleaner Settings",
+        title: "Ad Cleaner Tool-Ad-Cleaner Settings",
         heading: "Site Rules",
         intro: "Add frequently visited sites to the allowlist or blocklist. Allowlisted sites bypass filtering; blocklisted sites always stay enabled.",
         globalLabel: "Global switch",
@@ -320,7 +320,7 @@
         importHelp: "Import replaces site rules, selectors, and subscriptions, and restores the exported global switch state."
       },
       popup: {
-        title: "Ad Cleaner",
+        title: "Ad Cleaner Tool-Ad-Cleaner",
         heading: "Block, mark, clean",
         intro: "Automatically block common ad requests and highlight suspected ad blocks for one-click cleanup.",
         currentPage: "Current page",
@@ -477,10 +477,10 @@
       background: {
         tabUnavailable: "This tab cannot be diagnosed",
         diagnosticsUnsupported: "Rule match diagnostics are not supported by this browser",
-        pageTitleHidden: "Ad Cleaner · {count} page ad elements hidden",
-        pageTitleEmpty: "Ad Cleaner · No page ad elements currently hidden",
-        networkTitleBlocked: "Ad Cleaner · {count} links blocked",
-        networkTitleEmpty: "Ad Cleaner · No network matches on this page",
+        pageTitleHidden: "Ad Cleaner Tool-Ad-Cleaner · {count} page ad elements hidden",
+        pageTitleEmpty: "Ad Cleaner Tool-Ad-Cleaner · No page ad elements currently hidden",
+        networkTitleBlocked: "Ad Cleaner Tool-Ad-Cleaner · {count} links blocked",
+        networkTitleEmpty: "Ad Cleaner Tool-Ad-Cleaner · No network matches on this page",
         closed: "Disabled",
         loadFailed: "Load failed",
         usingPrevious: "{error}; continuing with the last successful version",
