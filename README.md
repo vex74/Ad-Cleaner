@@ -59,9 +59,9 @@
 
 ### 使用发布包 / Use the release package
 
-**中文：** ZIP 和 CRX 发布文件位于 GitHub [Releases](https://github.com/vex74/Ad-Cleaner/releases/tag/v0.9.27) 页面。
+**中文：** ZIP 和 CRX 发布文件位于 GitHub [Releases](https://github.com/vex74/Ad-Cleaner/releases/tag/v0.9.28) 页面。
 
-**English:** The ZIP and CRX packages are available on the GitHub [Releases](https://github.com/vex74/Ad-Cleaner/releases/tag/v0.9.27) page.
+**English:** The ZIP and CRX packages are available on the GitHub [Releases](https://github.com/vex74/Ad-Cleaner/releases/tag/v0.9.28) page.
 
 **中文：** 如果 Chrome 不允许直接安装 CRX，请先解压 ZIP，再通过“加载已解压的扩展程序”安装。
 
@@ -99,9 +99,9 @@ node --check background.js
 git diff --check
 ```
 
-**中文版本：** `0.9.27`
+**中文版本：** `0.9.28`
 
-**English version:** `0.9.27`
+**English version:** `0.9.28`
 
 ## 隐私说明 / Privacy
 

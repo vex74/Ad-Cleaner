@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "广告清理工具-Ad-Cleaner",
-  "version": "0.9.27",
+  "version": "0.9.28",
   "description": "广告清理工具-Ad-Cleaner：拦截广告、隐藏元素、管理站点规则。 / Ad Cleaner Tool-Ad-Cleaner: block ads, hide elements, manage site rules.",
   "icons": {
     "16": "icons/icon-16.png",

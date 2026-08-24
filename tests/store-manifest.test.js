@@ -7,7 +7,7 @@ const manifestPath = path.join(__dirname, "..", "manifest.json");
 const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
 
 test("store release uses the next review version", () => {
-  assert.equal(manifest.version, "0.9.27");
+  assert.equal(manifest.version, "0.9.28");
 });
 
 test("store release requests only permissions used by the extension", () => {
