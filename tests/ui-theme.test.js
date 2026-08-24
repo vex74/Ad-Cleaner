@@ -24,6 +24,8 @@ test("all extension surfaces use the shared dark sci-fi theme", () => {
   assert.match(contentStyle, /html\[data-theme="light"\]/);
   assert.match(optionsStyle, /body::before/);
   assert.match(optionsStyle, /\.card\.accent/);
+  assert.match(popupStyle, /\.label\s*\{\s*color:\s*rgba\(151, 220, 255, 0\.78\)/);
+  assert.match(popupStyle, /html\[data-theme="light"\]\s+\.label/);
   assert.match(popupStyle, /\.count-card/);
   assert.match(contentStyle, /\.ad-cleaner-picker-shell/);
   assert.match(contentStyle, /\.ad-cleaner-panel-shell/);

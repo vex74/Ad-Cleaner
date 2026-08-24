@@ -381,6 +381,14 @@ body::before {
   color: rgba(151, 220, 255, 0.78);
 }
 
+.label {
+  color: rgba(151, 220, 255, 0.78);
+}
+
+.footnote {
+  color: rgba(196, 224, 241, 0.68);
+}
+
 h1,
 .site-host,
 .metric-value {
@@ -529,6 +537,10 @@ html[data-theme="light"] .language-switch button.active {
 
 html[data-theme="light"] .eyebrow {
   color: rgba(12, 58, 99, 0.76);
+}
+
+html[data-theme="light"] .label {
+  color: rgba(12, 58, 99, 0.58);
 }
 
 html[data-theme="light"] .panel {
