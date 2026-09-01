@@ -15,9 +15,15 @@ class FakeElement {
     this.textContent = text;
     this.children = [];
     this.parentElement = null;
+    this.attributes = new Map();
+    this.classList = { add() {}, remove() {} };
+    this.style = {};
   }
 
   getAttribute(name) {
+    if (this.attributes.has(name)) {
+      return this.attributes.get(name);
+    }
     if (name === "class") {
       return this.className;
     }
@@ -30,8 +36,16 @@ class FakeElement {
     return null;
   }
 
-  hasAttribute() {
-    return false;
+  hasAttribute(name) {
+    return this.attributes.has(name);
+  }
+
+  setAttribute(name, value) {
+    this.attributes.set(name, String(value));
+  }
+
+  removeAttribute(name) {
+    this.attributes.delete(name);
   }
 
   closest() {
@@ -50,15 +64,21 @@ function loadHeuristics(url = "https://www.zhipin.com/job_detail/example.html") 
     .replace("  init();", "  // init disabled by heuristic tests")
     .replace(
       /\}\)\(\);\s*$/,
-      "  globalThis.__adCleanerTestApi = { findAdTarget, shouldApplyCosmeticRule: typeof shouldApplyCosmeticRule === 'function' ? shouldApplyCosmeticRule : undefined };\n})();"
+      "  globalThis.__adCleanerTestApi = { findAdTarget, markElement, hideMarkedElements, shouldApplyCosmeticRule: typeof shouldApplyCosmeticRule === 'function' ? shouldApplyCosmeticRule : undefined, documentElements: null };\n})();"
     );
   const parsedUrl = new URL(url);
   const documentElement = { clientWidth: 1440, clientHeight: 900 };
+  const documentElements = [];
   const context = {
     Element: FakeElement,
     URL,
     chrome: { storage: {}, runtime: { onMessage: { addListener() {} } } },
-    document: { documentElement },
+    document: {
+      documentElement,
+      querySelectorAll(selector) {
+        return selector.includes("data-ad-cleaner-marked") ? documentElements : [];
+      }
+    },
     globalThis: null,
     queueMicrotask,
     window: {
@@ -68,11 +88,15 @@ function loadHeuristics(url = "https://www.zhipin.com/job_detail/example.html") 
         href: parsedUrl.href,
         hostname: parsedUrl.hostname,
         pathname: parsedUrl.pathname
+      },
+      getComputedStyle() {
+        return { position: "static" };
       }
     }
   };
   context.globalThis = context;
   vm.runInNewContext(source, context, { filename: contentPath });
+  context.__adCleanerTestApi.documentElements = documentElements;
   return context.__adCleanerTestApi;
 }
 
@@ -90,6 +114,28 @@ test("still classifies explicit ad banners", () => {
 
   assert.equal(findAdTarget(adBanner), adBanner);
   assert.equal(findAdTarget(bannerAd), bannerAd);
+});
+
+test("scanning marks candidates without hiding them until cleanup", () => {
+  const api = loadHeuristics();
+  const ad = new FakeElement({ className: "ad-banner", text: "Advertisement" });
+  api.documentElements.push(ad);
+
+  api.markElement(ad, "heuristic");
+
+  assert.equal(ad.hasAttribute("data-ad-cleaner-marked"), true);
+  assert.equal(ad.hasAttribute("data-ad-cleaner-hidden"), false);
+
+  api.hideMarkedElements();
+  assert.equal(ad.hasAttribute("data-ad-cleaner-hidden"), true);
+});
+
+test("stylesheet does not hide generic ad selectors before cleanup", () => {
+  const stylesheet = fs.readFileSync(path.join(__dirname, "..", "content.css"), "utf8");
+
+  assert.doesNotMatch(stylesheet, /ins\.adsbygoogle[\s\S]*?display:\s*none\s*!important/);
+  assert.doesNotMatch(stylesheet, /div\[data-ad-slot\][\s\S]*?display:\s*none\s*!important/);
+  assert.match(stylesheet, /\[data-ad-cleaner-hidden="true"\][\s\S]*?display:\s*none\s*!important/);
 });
 
 test("does not classify generic commerce or recommendation copy as an advertisement", () => {
