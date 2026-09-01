@@ -1029,7 +1029,6 @@
 
     ensureElementId(element);
     element.setAttribute(MARK_ATTR, "true");
-    element.setAttribute(HIDDEN_ATTR, "true");
     element.setAttribute(REASON_ATTR, reason);
     element.classList.add("ad-cleaner-marked");
 
